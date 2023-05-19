@@ -2,30 +2,31 @@
 # Convenient pi-timolo-install.sh script written by Claude Pageau 1-Jul-2016
 ver="12.05"
 progName=$(basename -- "$0")
-TIMOLO_DIR='pi-timolo'  # Default folder install location
+TIMOLO_DIR='pi-timolo' # Default folder install location
 
-# Make sure ver below matches latest rclone ver on https://downloads.rclone.org/rclone-current-linux-arm.zip
+# Make sure ver below matches latest rclone ver on
+# https://downloads.rclone.org/rclone-current-linux-arm.zip
 rclone_cur_ver="rclone v1.57.0"
 
 cd ~
 is_upgrade=false
-if [ -d "$TIMOLO_DIR" ] ; then
-  STATUS="Upgrade"
-  echo "INFO  : Upgrade pi-timolo files"
-  is_upgrade=true
+if [ -d "$TIMOLO_DIR" ]; then
+    STATUS="Upgrade"
+    echo "INFO  : Upgrade pi-timolo files"
+    is_upgrade=true
 else
-  echo "INFO  : New pi-timolo Install"
-  STATUS="New Install"
-  mkdir -p $TIMOLO_DIR
-  mkdir -p $TIMOLO_DIR/media
-  echo "INFO  : $TIMOLO_DIR Folder Created"
+    echo "INFO  : New pi-timolo Install"
+    STATUS="New Install"
+    mkdir -p $TIMOLO_DIR
+    mkdir -p $TIMOLO_DIR/media
+    echo "INFO  : $TIMOLO_DIR Folder Created"
 fi
 
 cd $TIMOLO_DIR
-INSTALL_PATH=$( pwd )
+INSTALL_PATH=$(pwd)
 
 # Remember where this script was launched from
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "
 -------------------------------------------------------------
 INFO  : $progName $ver  written by Claude Pageau
@@ -33,24 +34,24 @@ INFO  : $progName $ver  written by Claude Pageau
 -------------------------------------------------------------
 "
 # check if this is an upgrade and bypass update of configuration files
-if $is_upgrade ; then
-  timoloFiles=("menubox.sh" "pi-timolo.py" "pi-timolo.sh" "image-stitching" "config.cfg" \
-  "webserver.py" "webserver2.py" "webserver3.py" "webserver.sh" "pantilthat.py" \
-  "convid.sh" "makevideo.sh" "mvleavelast.sh" "remote-run.sh" "install-py3exiv2.sh")
+if $is_upgrade; then
+    timoloFiles=("menubox.sh" "pi-timolo.py" "pi-timolo.sh" "image-stitching" "config.cfg"
+        "webserver.py" "webserver2.py" "webserver3.py" "webserver.sh" "pantilthat.py"
+        "convid.sh" "makevideo.sh" "mvleavelast.sh" "remote-run.sh" "install-py3exiv2.sh")
 
-  if [ ! -f config.cfg ]; then
-    mv plugins plugins.bak
-    mkdir -p data
-    mv *dat data
-  fi
+    if [ ! -f config.cfg ]; then
+        mv plugins plugins.bak
+        mkdir -p data
+        mv *dat data
+    fi
 
-else   # New Install
-  timoloFiles=("config.py" "menubox.sh" "pi-timolo.py" "pi-timolo.sh" "image-stitching" "config.cfg" \
-  "webserver.py" "webserver2.py" "webserver3.py" "webserver.sh" "watch-app.sh" "shutdown.py" "pantilthat.py" \
-  "convid.sh" "makevideo.sh" "video.conf" "mvleavelast.sh" "remote-run.sh" "install-py3exiv2.sh")
+else # New Install
+    timoloFiles=("config.py" "menubox.sh" "pi-timolo.py" "pi-timolo.sh" "image-stitching" "config.cfg"
+        "webserver.py" "webserver2.py" "webserver3.py" "webserver.sh" "watch-app.sh" "shutdown.py" "pantilthat.py"
+        "convid.sh" "makevideo.sh" "video.conf" "mvleavelast.sh" "remote-run.sh" "install-py3exiv2.sh")
 fi
 
-for fname in "${timoloFiles[@]}" ; do
+for fname in "${timoloFiles[@]}"; do
     wget_output=$(wget -O $fname -q --show-progress https://raw.github.com/pageauc/pi-timolo/master/source/$fname)
     if [ $? -ne 0 ]; then
         wget_output=$(wget -O $fname -q https://raw.github.com/pageauc/pi-timolo/master/source/$fname)
@@ -63,7 +64,7 @@ for fname in "${timoloFiles[@]}" ; do
 done
 
 wget -O config.py.new -q --show-progress https://raw.github.com/pageauc/pi-timolo/master/source/config.py
-if [ $? -ne 0 ] ;  then
+if [ $? -ne 0 ]; then
     wget -O config.py.new https://raw.github.com/pageauc/pi-timolo/master/source/config.py
     wget -O watch-app-new.sh https://raw.github.com/pageauc/pi-timolo/master/source/watch-app.sh
     wget -O video.conf.new https://raw.github.com/pageauc/pi-timolo/master/source/video.conf
@@ -97,63 +98,62 @@ chmod +x image-stitching
 sudo cp ./image-stitching /usr/local/bin
 rm ./image-stitching
 
-if [ ! -f user_motion_code.py ] ; then   # wget user_motion_code.py file if it does not exist
+if [ ! -f user_motion_code.py ]; then # wget user_motion_code.py file if it does not exist
     wget -O user_motion_code.py -q --show-progress https://raw.github.com/pageauc/pi-timolo/master/source/user_motion_code.py
-    if [ $? -ne 0 ] ;  then
+    if [ $? -ne 0 ]; then
         wget -O user_motion_code.py https://raw.github.com/pageauc/pi-timolo/master/source/user_motion_code.py
     fi
 fi
 
-
-if [ ! -f video.conf ] ; then
+if [ ! -f video.conf ]; then
     cp video.conf.new video.conf
 fi
 
-if [ ! -f config.py ] ; then
+if [ ! -f config.py ]; then
     cp config.py.new config.py
 fi
-cp config.py config.py.prev   # make copy of previous configuration
+cp config.py config.py.prev # make copy of previous configuration
 
-if [ ! -f watch-app.sh ] ; then
+if [ ! -f watch-app.sh ]; then
     cp watch-app-new.sh watch-app.sh
 fi
 
 # Install plugins if not already installed.  You must delete a plugin file to force reinstall.
 echo "INFO  : $STATUS Check/Install pi-timolo/plugins    Wait ..."
-PLUGINS_DIR='plugins'  # Default folder install location
+PLUGINS_DIR='plugins' # Default folder install location
 # List of plugin Files to Check
-pluginFiles=("__init__.py" "dashcam.py" "secfast.py" "secQTL.py" "secstill.py" \
-"secvid.py" "strmvid.py" "shopcam.py" "slowmo.py" "TLlong.py" "TLshort.py" "TLpan.py" "pano.py")
+pluginFiles=("__init__.py" "dashcam.py" "secfast.py" "secQTL.py" "secstill.py"
+    "secvid.py" "strmvid.py" "shopcam.py" "slowmo.py" "TLlong.py" "TLshort.py" "TLpan.py" "pano.py")
 
 mkdir -p $PLUGINS_DIR
 cd $PLUGINS_DIR
-for fname in "${pluginFiles[@]}" ; do
-  if [ -f $fname ]; then     # check if local file exists.
-    echo "INFO  : $fname plugin Found.  Skip Download ..."
-  else
-    wget_output=$(wget -O $fname -q --show-progress https://raw.github.com/pageauc/pi-timolo/master/source/plugins/$fname)
-    if [ $? -ne 0 ]; then
-        wget_output=$(wget -O $fname -q https://raw.github.com/pageauc/pi-timolo/master/source/plugins/$fname)
+for fname in "${pluginFiles[@]}"; do
+    if [ -f $fname ]; then # check if local file exists.
+        echo "INFO  : $fname plugin Found.  Skip Download ..."
+    else
+        wget_output=$(wget -O $fname -q --show-progress https://raw.github.com/pageauc/pi-timolo/master/source/plugins/$fname)
         if [ $? -ne 0 ]; then
-            echo "ERROR : $fname wget Download Failed. Possible Cause Internet Problem."
-        else
-            wget -O $fname "https://raw.github.com/pageauc/pi-timolo/master/source/plugins/$fname"
+            wget_output=$(wget -O $fname -q https://raw.github.com/pageauc/pi-timolo/master/source/plugins/$fname)
+            if [ $? -ne 0 ]; then
+                echo "ERROR : $fname wget Download Failed. Possible Cause Internet Problem."
+            else
+                wget -O $fname "https://raw.github.com/pageauc/pi-timolo/master/source/plugins/$fname"
+            fi
         fi
     fi
-  fi
 done
 cd ..
 
 # Install rclone samples
 echo "INFO  : $STATUS Check/Install pi-timolo/rclone-samples    Wait ..."
-RCLONE_DIR='rclone-samples'  # Default folder install location
+RCLONE_DIR='rclone-samples' # Default folder install location
 # List of plugin Files to Check
-rcloneFiles=("Readme.md" "rclone-master.sh" "rclone-mo-copy-videos.sh" "rclone-mo-sync.sh" \
-"rclone-mo-sync-lockfile.sh" "rclone-mo-sync-recent.sh" "rclone-tl-copy.sh" "rclone-tl-sync-recent.sh" "rclone-cleanup.sh")
+rcloneFiles=("Readme.md" "rclone-master.sh" "rclone-mo-copy-videos.sh" "rclone-mo-sync.sh"
+    "rclone-mo-sync-lockfile.sh" "rclone-mo-sync-recent.sh" "rclone-tl-copy.sh" "rclone-tl-sync-recent.sh" "rclone-cleanup.sh")
 
 mkdir -p $RCLONE_DIR
 cd $RCLONE_DIR
-for fname in "${rcloneFiles[@]}" ; do
+for fname in "${rcloneFiles[@]}"; do
     wget_output=$(wget -O $fname -q --show-progress https://raw.github.com/pageauc/pi-timolo/master/source/rclone-samples/$fname)
     if [ $? -ne 0 ]; then
         wget_output=$(wget -O $fname -q https://raw.github.com/pageauc/pi-timolo/master/source/rclone-samples/$fname)
@@ -170,13 +170,13 @@ cd ..
 rclone_install=true
 if [ -f /usr/bin/rclone ]; then
     /usr/bin/rclone version
-    rclone_ins_ver=$( /usr/bin/rclone version | grep rclone )
+    rclone_ins_ver=$(/usr/bin/rclone version | grep rclone)
     if [ "$rclone_ins_ver" == "$rclone_cur_ver" ]; then
         rclone_install=false
     fi
 fi
 
-if "$rclone_install" == true ; then
+if "$rclone_install" == true; then
     # Install rclone with latest version
     echo "INFO  : Install Latest Rclone from https://downloads.rclone.org/rclone-current-linux-arm.zip"
     wget -O rclone.zip -q --show-progress https://downloads.rclone.org/rclone-current-linux-arm.zip
@@ -208,16 +208,16 @@ sudo apt-get install -yq python-picamera
 sudo apt-get install -yq python3-picamera
 sudo apt-get install -yq python-pil
 sudo apt-get install -yq python3-pil
-sudo apt-get install -yq python-imaging  # depricated in Buster
+sudo apt-get install -yq python-imaging # depricated in Buster
 sudo apt-get install -yq dos2unix
 sudo apt-get install -yq python-pyexiv2
-sudo apt-get install -yq ffmpeg   # required for Buster.
-sudo apt-get install -yq libav-tools  # backward compatible, replaced by ffmpeg in Buster
-sudo apt-get install -yq pandoc # convert markdown to plain text for Readme.md
-sudo apt-get install -yq gpac   # required for MP4Box video converter
+sudo apt-get install -yq ffmpeg             # required for Buster.
+sudo apt-get install -yq libav-tools        # backward compatible, replaced by ffmpeg in Buster
+sudo apt-get install -yq pandoc             # convert markdown to plain text for Readme.md
+sudo apt-get install -yq gpac               # required for MP4Box video converter
 sudo apt-get install -yq fonts-freefont-ttf # Required for Jessie Lite Only
 sudo apt-get install -yq python-opencv
-sudo apt-get install -yq python3-opencv  # Raspbian Buster Installs opencv 3.2 (won't change existing)
+sudo apt-get install -yq python3-opencv # Raspbian Buster Installs opencv 3.2 (won't change existing)
 sudo apt-get install -yq python-pip
 sudo apt-get install -yq python3-dateutil
 sudo apt-get install -yq python-dateutil
@@ -242,14 +242,14 @@ sudo make install
 echo "$0 Performing Cleanup"
 cd ~
 rm bcm2835-1.$bcm_ver.tar.gz
-sudo rm -r  bcm2835-1.$bcm_ver
+sudo rm -r bcm2835-1.$bcm_ver
 echo "$0 Completed Install of bcm2835-1.$bcm_ver"
 echo ""
 
-if [ $? -ne 0 ] ;  then
+if [ $? -ne 0 ]; then
     sudo apt-get install -yq python3-pip
-    sudo pip install python-dateutil  # used for scheduled date/time feature
-    if [ $? -ne 0 ] ;  then
+    sudo pip install python-dateutil # used for scheduled date/time feature
+    if [ $? -ne 0 ]; then
         # Upgrade version of pip on Raspbian Wheezy to add ssl support
         curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         sudo python get-pip.py
@@ -268,20 +268,20 @@ echo "INFO  : $STATUS Done Dependencies Install"
 
 # Check if pi-timolo-install.sh was launched from pi-timolo folder
 if [ "$DIR" != "$INSTALL_PATH" ]; then
-  if [ -f 'pi-timolo-install.sh' ]; then
-    echo "INFO  : $STATUS Cleanup pi-timolo-install.sh"
-    rm pi-timolo-install.sh
-  fi
+    if [ -f 'pi-timolo-install.sh' ]; then
+        echo "INFO  : $STATUS Cleanup pi-timolo-install.sh"
+        rm pi-timolo-install.sh
+    fi
 fi
 
 # cleanup old files from previous versions of install
-cleanup_files=("get-pip.py" "gdrive" "install.sh" "makemovie.sh" "makedailymovie.sh" "pancam.py" "pancam.pyc" \
-"convid.conf" "convid.conf.orig" "convid.conf.prev" "convid.conf.1" "convid.conf.new" \
-"makevideo.conf" "makevideo.conf.orig" "makevideo.conf.prev" "makevideo.conf.1" \
-"makevideo.conf.new" "sync.sh" "pi-timolo-install.sh" "rclone-sync-new.sh" "rclone-videos-new.sh")
+cleanup_files=("get-pip.py" "gdrive" "install.sh" "makemovie.sh" "makedailymovie.sh" "pancam.py" "pancam.pyc"
+    "convid.conf" "convid.conf.orig" "convid.conf.prev" "convid.conf.1" "convid.conf.new"
+    "makevideo.conf" "makevideo.conf.orig" "makevideo.conf.prev" "makevideo.conf.1"
+    "makevideo.conf.new" "sync.sh" "pi-timolo-install.sh" "rclone-sync-new.sh" "rclone-videos-new.sh")
 
-for fname in "${cleanup_files[@]}" ; do
-    if [ -f $fname ] ; then
+for fname in "${cleanup_files[@]}"; do
+    if [ -f $fname ]; then
         echo "INFO  : Delete $fname"
         rm -f $fname
     fi
@@ -314,7 +314,7 @@ Minimal Instructions:
     cd ~/pi-timolo
     ./menubox.sh"
 
-if $is_upgrade ; then
+if $is_upgrade; then
     echo "
 IMPORTANT: pi-timolo.py ver 10.x Adds a Sched StartAt Feature.
            If pi-timolo.py gives error messages on start
@@ -339,4 +339,3 @@ For Full Instructions See Wiki at https://github.com/pageauc/pi-timolo/wiki
 
 Good Luck Claude ...
 Bye"
-
