@@ -218,6 +218,7 @@ ipcam/ipcam_1.pyx
 
 # Ignore the following directories
 # They contain user data and user configuration settings
-plugins/
-media/
 data/
+h264_work/
+media/
+plugins/
