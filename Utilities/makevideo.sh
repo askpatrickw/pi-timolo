@@ -255,4 +255,3 @@ echo "INFO  : Processing Completed Successfully ..."
 echo "=========================================================================="
 echo "$progName Done"
 #------------------ End do_timelapse_video Script ------------------------
-

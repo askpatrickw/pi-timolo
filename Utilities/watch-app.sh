@@ -66,7 +66,7 @@ function do_watch_restart ()
     if [ -z "$(pgrep -f $watch_app_fname)" ] ; then
         # pi-timolo did not start
         echo "$now INFO  : Restart Failed $watch_app_fname"
-        do_watch_reboot        
+        do_watch_reboot
     else
         progPID=$( pgrep -f $watch_app_fname )
         echo "$now INFO  : Restart OK $watch_app_fname PID $progPID"
@@ -311,4 +311,3 @@ fi
 echo "------------------------------------------
 $progName Done ..."
 exit
-
