@@ -11,6 +11,7 @@ These utilities are unchanged from the original pi-timolo repository.
 | myip.sh | Get my IP address |
 | remote-run.sh | Enable remote configuration from a remote storage service ([see wiki](https://github.com/pageauc/pi-timolo/wiki/How-to-Setup-config.py-Remote-Configuration#how-to-remotely-run-a-remote-runsh-bash-script))|
 | watch-app.sh | Watch a directory and run a command on changes ([see wiki](https://github.com/pageauc/pi-timolo/wiki/How-to-Setup-config.py-Remote-Configuration)) |
+| py3exiv2-arm/pyexiv2 folder | Samples and Utils from py3exiv2 which do not appear to be used anywhere else. |
 
 ## Modified Utilities
 

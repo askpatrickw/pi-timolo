@@ -176,7 +176,7 @@ class XmpTag(object):
 
     def _set_raw_value(self, value):
         type_ = self._tag._getExiv2Type()
-        
+
         if type_ == 'XmpText':
             self._tag._setTextValue(value)
 
@@ -475,8 +475,8 @@ class XmpTag(object):
                 except UnicodeEncodeError:
                     raise XmpValueError(value, type_)
 
-            elif isinstance(value, bytes): 
-                return value 
+            elif isinstance(value, bytes):
+                return value
 
             raise XmpValueError(value, type_)
 
@@ -573,4 +573,3 @@ def unregister_namespaces():
     This function always succeeds.
     """
     libexiv2python._unregisterAllXmpNs()
-

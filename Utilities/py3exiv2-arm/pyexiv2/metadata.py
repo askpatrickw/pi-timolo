@@ -322,7 +322,7 @@ class ImageMetadata(MutableMapping):
                         tag or a value
                         Type: pyexiv2.exif.ExifTag instance or
                               pyexiv2.iptc.IptcTag instance or
-                              pyexiv2.xmp.XmpTag instance or 
+                              pyexiv2.xmp.XmpTag instance or
                               any valid value type
         """
         family = key.split('.')[0].lower()
@@ -456,7 +456,7 @@ class ImageMetadata(MutableMapping):
         exif -- whether to copy the EXIF metadata, default True
         iptc -- whether to copy the IPTC metadata, default True
         xmp -- whether to copy the XMP metadata, default True
-        comment -- whether to copy the image comment, default True 
+        comment -- whether to copy the image comment, default True
         """
         self._image._copyMetadata(other._image, exif, iptc, xmp)
         # Empty the cache where needed
@@ -527,4 +527,3 @@ class ImageMetadata(MutableMapping):
     iptc_charset = property(fget=_get_iptc_charset, fset=_set_iptc_charset,
                             fdel=_del_iptc_charset,
                             doc='An optional character set the IPTC data is encoded in.')
-
