@@ -28,7 +28,9 @@ else
 fi
 
 echo
-echo "Please edit the config.py file to configure the application"
+echo "Please edit the config.py file to configure the application."
+echo "The active copy of the plugins directory is located at ./plugins"
+echo
 echo "Run the application from the command line: ./pi-timolo.py"
 echo "Run the application in the background: ./timolo.sh start"
 echo "See the WIKI for setting up the application to run at boot"
