@@ -1,7 +1,7 @@
 #!/bin/bash
-
-echo "INFO  : $STATUS Install pi-timolo Dependencies Wait ..."
-
+echo
+echo "Installing pi-timolo Dependencies Wait ..."
+echo
 sudo apt-get update -yq
 sudo apt-get install -yq ffmpeg
 sudo apt-get install -yq gpac      # required for MP4Box video converter
@@ -14,12 +14,17 @@ sudo apt-get install -yq python3-pip
 sudo apt-get install -yq python-pyexiv2
 sudo apt-get install -yq python3-rpi.gpio
 
+echo
+echo "resizing swap file to 1024"
+echo
 sudo dphys-swapfile swapoff
 sudo sed -i 's/CONF_SWAPSIZE=100/CONF_SWAPSIZE=1024/g' /etc/dphys-swapfile
 sudo dphys-swapfile setup
 sudo dphys-swapfile swapon
 
+echo
 echo "Installing py3exiv2 dependencies"
+echo
 sudo apt-get install -y python-all-dev
 sudo apt-get install -y libexiv2-dev
 sudo apt-get install -y libboost-python-dev
@@ -29,7 +34,9 @@ cd "$HOME/py3exiv2"|| {
     echo "Failure to CD to $HOME/py3exiv2"
     exit 1
 }
+echo
 echo "Building py3exiv2 ... THIS WILL TAKE A WHILE."
+echo
 python3 configure.py
 ./build.sh
 sudo ./build.sh -i
@@ -52,4 +59,5 @@ sudo ./build.sh -i
 # sudo apt-get install -yq python-rpi.gpio
 
 
-echo "INFO  : $STATUS Done Dependencies Install"
+echo "INFO  : Done Dependencies Install"
+echo "Run sudo raspi-config and enable the camera and I2C before using pi-timolo"
