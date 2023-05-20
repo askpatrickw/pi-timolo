@@ -14,7 +14,26 @@ sudo apt-get install -yq python3-pip
 sudo apt-get install -yq python-pyexiv2
 sudo apt-get install -yq python3-rpi.gpio
 
-sudo pip3 install py3exiv2
+sudo dphys-swapfile swapoff
+sudo sed -i 's/CONF_SWAPSIZE=100/CONF_SWAPSIZE=1024/g' /etc/dphys-swapfile
+sudo dphys-swapfile setup
+sudo dphys-swapfile swapon
+
+echo "Installing py3exiv2 dependencies"
+sudo apt-get install -y python-all-dev
+sudo apt-get install -y libexiv2-dev
+sudo apt-get install -y libboost-python-dev
+sudo apt-get install -y g++
+git clone https://github.com/mcmclx/py3exiv2.git "$HOME/py3exiv2"
+cd "$HOME/py3exiv2"|| {
+    echo "Failure to CD to $HOME/py3exiv2"
+    exit 1
+}
+echo "Building py3exiv2 ... THIS WILL TAKE A WHILE."
+python3 configure.py
+./build.sh
+sudo ./build.sh -i
+
 
 # Don't worry about old versions (pre-buster) of Raspbian
 # TODO: Delete these lines if they are not needed
