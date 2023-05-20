@@ -123,7 +123,7 @@ cd ~/pi-timolo
 ./webserver.py
 ```
 
-![webserver browser screen shot](webserver.jpg)
+![webserver browser screen shot](docs/images/webserver.jpg)
 
 ## shutdown.py
 This will safely halt the raspberry pi when a momentary switch is held for a specified number of seconds
