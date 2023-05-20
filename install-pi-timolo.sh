@@ -6,10 +6,17 @@ echo "Creating plugins, media and data directories unless they already exist"
 echo
 if [ ! -d "plugins" ]; then
     mkdir plugins
-    cp -r ./default_plugins/* ./plugins
+    cp -r ./original_config/plugins ./plugins
     echo "plugins directory created"
 else
     echo "plugins directory already exists"
+fi
+
+if [ ! -f "config.py" ]; then
+    cp ./original_config/config.py .
+    echo "config.py file created"
+else
+    echo "config.py file already exists"
 fi
 
 if [ ! -d "media" ]; then

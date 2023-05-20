@@ -222,3 +222,4 @@ ipcam/ipcam_1.pyx
 /h264_work/
 /media/
 /plugins
+config.py
