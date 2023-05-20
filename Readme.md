@@ -31,6 +31,9 @@ that hardware, I may never work on it.
 The Rclone functionality is not installed by default like it was in the original
 repo. I will likely work on this at some point as it wil be useful in my setup.
 
+I removed the GUI configuration editor. I did also remove mention of it from the
+[Original README](docs/Original_README.md) in this repo so as to not confuse people.
+
 ## Repo Layout
 
 | File or Folder | Description |
