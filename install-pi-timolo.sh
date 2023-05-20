@@ -22,7 +22,7 @@ fi
 if [ ! -d "media" ]; then
     mkdir media
     echo "media directory created"
-    cp webserver/webserver.txt ./media
+    cp original_config/webserver/webserver.txt ./media
 else
     echo "media directory already exists"
 fi
