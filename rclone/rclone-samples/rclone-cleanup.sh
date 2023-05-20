@@ -22,7 +22,7 @@ else
     if [ -f /usr/bin/rclone ]; then
         echo "INFO  : rclone is installed at /usr/bin/rclone"
         rclone version   # display rclone version
-        rclone listremotes        
+        rclone listremotes
         echo "INFO  : /usr/bin/rclone cleanup -v $rcloneName:"
         echo "        One Moment Please ..."
         /usr/bin/rclone cleanup -v $rcloneName:
@@ -32,4 +32,3 @@ else
     fi
 fi
 echo "$progName Bye ..."
-

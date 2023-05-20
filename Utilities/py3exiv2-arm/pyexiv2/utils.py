@@ -33,12 +33,11 @@ import re
 
 from fractions import Fraction
 
+
 class FixedOffset(datetime.tzinfo):
-    """Define a fixed positive or negative offset of a local time from UTC.
+    """Define a fixed positive or negative offset of a local time from UTC."""
 
-    """
-
-    def __init__(self, sign='+', hours=0, minutes=0):
+    def __init__(self, sign="+", hours=0, minutes=0):
         """Initialize an offset from a sign ('+' or '-') and an absolute value
         expressed in hours and minutes.
 
@@ -65,9 +64,9 @@ class FixedOffset(datetime.tzinfo):
         Return: a whole number of minutes in the range -1439 to 1439 inclusive
         """
         total = self.hours * 60 + self.minutes
-        if self.sign == '-':
+        if self.sign == "-":
             total = -total
-        return datetime.timedelta(minutes = total)
+        return datetime.timedelta(minutes=total)
 
     def dst(self, dt):
         """Return the daylight saving time (DST) adjustment.
@@ -92,9 +91,9 @@ class FixedOffset(datetime.tzinfo):
         Return: a human-readable representation of the offset
         """
         if self.hours == 0 and self.minutes == 0:
-            return 'Z'
+            return "Z"
         else:
-            return '%s%02d:%02d' % (self.sign, self.hours, self.minutes)
+            return "%s%02d:%02d" % (self.sign, self.hours, self.minutes)
 
     def __equal__(self, other):
         """Test equality between this offset and another offset.
@@ -104,8 +103,11 @@ class FixedOffset(datetime.tzinfo):
 
         Return: True if the offset are equal, False otherwise
         """
-        return (self.sign == other.sign) and (self.hours == other.hours) and \
-            (self.minutes == other.minutes)
+        return (
+            (self.sign == other.sign)
+            and (self.hours == other.hours)
+            and (self.minutes == other.minutes)
+        )
 
 
 def undefined_to_string(undefined):
@@ -122,9 +124,9 @@ def undefined_to_string(undefined):
     Return: the corresponding decoded string
     """
     if not undefined:
-        return ''
+        return ""
 
-    return ''.join([chr(int(x)) for x in undefined.rstrip().split(' ')])
+    return "".join([chr(int(x)) for x in undefined.rstrip().split(" ")])
 
 
 def string_to_undefined(sequence):
@@ -141,11 +143,11 @@ def string_to_undefined(sequence):
     """
     return " ".join([str(ord(s)) for s in sequence])
 
-def is_fraction(obj):
-    """Test whether the object is a valid fraction.
 
-    """
+def is_fraction(obj):
+    """Test whether the object is a valid fraction."""
     return isinstance(obj, Fraction)
+
 
 def match_string(string):
     """Match a string against the expected format for a :class:`Fraction`
@@ -159,13 +161,14 @@ def match_string(string):
 
     Raise ValueError: if the format of the string is invalid
     """
-    format_re = re.compile(r'(?P<numerator>-?\d+)/(?P<denominator>\d+)')
+    format_re = re.compile(r"(?P<numerator>-?\d+)/(?P<denominator>\d+)")
     match = format_re.match(string)
     if match is None:
-        raise ValueError('Invalid format for a rational: %s' % string)
+        raise ValueError("Invalid format for a rational: %s" % string)
 
     gd = match.groupdict()
-    return (int(gd['numerator']), int(gd['denominator']))
+    return (int(gd["numerator"]), int(gd["denominator"]))
+
 
 def make_fraction(*args):
     """Make a fraction.
@@ -181,7 +184,7 @@ def make_fraction(*args):
         denominator = args[1]
 
     else:
-        raise TypeError('Invalid format for a fraction: %s' % str(args))
+        raise TypeError("Invalid format for a fraction: %s" % str(args))
 
     if denominator == 0 and numerator == 0:
         # Null rationals are often stored as '0/0'.
@@ -201,10 +204,10 @@ def fraction_to_string(fraction):
     """
     if isinstance(fraction, Fraction):
         # fractions.Fraction.__str__ returns '0' for a null numerator.
-        return '%s/%s' % (fraction.numerator, fraction.denominator)
+        return "%s/%s" % (fraction.numerator, fraction.denominator)
 
     else:
-        raise TypeError('Not a fraction')
+        raise TypeError("Not a fraction")
 
 
 class ListenerInterface(object):
@@ -331,9 +334,12 @@ class GPSCoordinate(object):
     Its attributes (degrees, minutes, seconds, direction) are read-only
     properties.
     """
-    _format_re = re.compile(r'(?P<degrees>-?\d+),'
-                    '(?P<minutes>\d+)(,(?P<seconds>\d+)|\.(?P<fraction>\d+))'
-                    '(?P<direction>[NSEW])')
+
+    _format_re = re.compile(
+        r"(?P<degrees>-?\d+),"
+        "(?P<minutes>\d+)(,(?P<seconds>\d+)|\.(?P<fraction>\d+))"
+        "(?P<direction>[NSEW])"
+    )
 
     def __init__(self, degrees, minutes, seconds, direction):
         """Instanciate a GPSCoordinate object.
@@ -347,50 +353,43 @@ class GPSCoordinate(object):
         Raise ValueError: if any of the parameter is not in the expected range
                            of values
         """
-        if direction not in ('N', 'S', 'E', 'W'):
-            raise ValueError('Invalid direction: %s' % direction)
+        if direction not in ("N", "S", "E", "W"):
+            raise ValueError("Invalid direction: %s" % direction)
 
         self._direction = direction
-        if (direction in ('N', 'S') and (degrees < 0 or degrees > 90)) or \
-           (direction in ('E', 'W') and (degrees < 0 or degrees > 180)):
-            raise ValueError('Invalid value for degrees: %d' % degrees)
+        if (direction in ("N", "S") and (degrees < 0 or degrees > 90)) or (
+            direction in ("E", "W") and (degrees < 0 or degrees > 180)
+        ):
+            raise ValueError("Invalid value for degrees: %d" % degrees)
 
         self._degrees = degrees
         if minutes < 0 or minutes > 60:
-            raise ValueError('Invalid value for minutes: %d' % minutes)
+            raise ValueError("Invalid value for minutes: %d" % minutes)
 
         self._minutes = minutes
         if seconds < 0 or seconds > 60:
-            raise ValueError('Invalid value for seconds: %d' % seconds)
+            raise ValueError("Invalid value for seconds: %d" % seconds)
 
         self._seconds = seconds
 
     @property
     def degrees(self):
-        """The degrees component of the coordinate.
-
-        """
+        """The degrees component of the coordinate."""
         return self._degrees
 
     @property
     def minutes(self):
-        """The minutes component of the coordinate.
-
-        """
+        """The minutes component of the coordinate."""
         return self._minutes
 
     @property
     def seconds(self):
-        """The seconds component of the coordinate.
-
-        """
+        """The seconds component of the coordinate."""
         return self._seconds
 
     @property
     def direction(self):
-        """The direction component of the coordinate.
-
-        """
+        """The direction component of the coordinate."""
         return self._direction
 
     @staticmethod
@@ -410,18 +409,19 @@ class GPSCoordinate(object):
         """
         match = GPSCoordinate._format_re.match(string)
         if match is None:
-            raise ValueError('Invalid format for a GPS coordinate: %s' % string)
+            raise ValueError("Invalid format for a GPS coordinate: %s" % string)
 
         gd = match.groupdict()
-        fraction = gd['fraction']
+        fraction = gd["fraction"]
         if fraction is not None:
             seconds = int(round(int(fraction[:2]) * 0.6))
 
         else:
-            seconds = int(gd['seconds'])
+            seconds = int(gd["seconds"])
 
-        return GPSCoordinate(int(gd['degrees']), int(gd['minutes']), seconds,
-                             gd['direction'])
+        return GPSCoordinate(
+            int(gd["degrees"]), int(gd["minutes"]), seconds, gd["direction"]
+        )
 
     def __eq__(self, other):
         """Compare two GPS coordinates for equality.
@@ -433,18 +433,24 @@ class GPSCoordinate(object):
 
         Return: True if equal, False otherwise
         """
-        return (self._degrees == other._degrees) and \
-               (self._minutes == other._minutes) and \
-               (self._seconds == other._seconds) and \
-               (self._direction == other._direction)
+        return (
+            (self._degrees == other._degrees)
+            and (self._minutes == other._minutes)
+            and (self._seconds == other._seconds)
+            and (self._direction == other._direction)
+        )
 
     def __str__(self):
         """Return a string representation of the GPS coordinate conforming
         to the XMP specification
 
         """
-        return '%d,%d,%d%s' % (self._degrees, self._minutes, self._seconds,
-                               self._direction)
+        return "%d,%d,%d%s" % (
+            self._degrees,
+            self._minutes,
+            self._seconds,
+            self._direction,
+        )
 
 
 class DateTimeFormatter(object):
@@ -473,7 +479,7 @@ class DateTimeFormatter(object):
         seconds = t.total_seconds()
         hours = int(seconds / 3600)
         minutes = abs(int((seconds - hours * 3600) / 60))
-        return '%+03d:%02d' % (hours, minutes)
+        return "%+03d:%02d" % (hours, minutes)
 
     @staticmethod
     def exif(d):
@@ -488,15 +494,22 @@ class DateTimeFormatter(object):
         Raise TypeError: if the parameter is not a datetime or a date object
         """
         if isinstance(d, datetime.datetime):
-            return '%04d:%02d:%02d %02d:%02d:%02d' % \
-                (d.year, d.month, d.day, d.hour, d.minute, d.second)
+            return "%04d:%02d:%02d %02d:%02d:%02d" % (
+                d.year,
+                d.month,
+                d.day,
+                d.hour,
+                d.minute,
+                d.second,
+            )
 
         elif isinstance(d, datetime.date):
-            return '%04d:%02d:%02d' % (d.year, d.month, d.day)
+            return "%04d:%02d:%02d" % (d.year, d.month, d.day)
 
         else:
-            raise TypeError('expecting an object of type '
-                            'datetime.datetime or datetime.date')
+            raise TypeError(
+                "expecting an object of type " "datetime.datetime or datetime.date"
+            )
 
     @staticmethod
     def iptc_date(d):
@@ -516,11 +529,12 @@ class DateTimeFormatter(object):
             # field representing a date is '%Y%m%d'. However, the string
             # expected by exiv2's DateValue::read(string) should be
             # formatted using pattern '%Y-%m-%d'.
-            return '%04d-%02d-%02d' % (d.year, d.month, d.day)
+            return "%04d-%02d-%02d" % (d.year, d.month, d.day)
 
         else:
-            raise TypeError('expecting an object of type '
-                            'datetime.datetime or datetime.date')
+            raise TypeError(
+                "expecting an object of type " "datetime.datetime or datetime.date"
+            )
 
     @staticmethod
     def iptc_time(d):
@@ -539,20 +553,21 @@ class DateTimeFormatter(object):
             # field representing a time is '%H%M%S±%H%M'. However, the
             # string expected by exiv2's TimeValue::read(string) should be
             # formatted using pattern '%H:%M:%S±%H:%M'.
-            r = '%02d:%02d:%02d' % (d.hour, d.minute, d.second)
+            r = "%02d:%02d:%02d" % (d.hour, d.minute, d.second)
             if d.tzinfo is not None:
                 t = d.utcoffset()
                 if t is not None:
                     r += DateTimeFormatter.timedelta_to_offset(t)
 
             else:
-                r += '+00:00'
+                r += "+00:00"
 
             return r
 
         else:
-            raise TypeError('expecting an object of type '
-                            'datetime.datetime or datetime.time')
+            raise TypeError(
+                "expecting an object of type " "datetime.datetime or datetime.time"
+            )
 
     @staticmethod
     def xmp(d):
@@ -569,34 +584,58 @@ class DateTimeFormatter(object):
         if isinstance(d, datetime.datetime):
             t = d.utcoffset()
             if d.tzinfo is None or t is None or t == datetime.timedelta(0):
-                tz = 'Z'
+                tz = "Z"
 
             else:
                 tz = DateTimeFormatter.timedelta_to_offset(t)
 
-            if d.hour == 0 and d.minute == 0 and \
-                d.second == 0 and d.microsecond == 0 and \
-                (d.tzinfo is None or d.utcoffset() == datetime.timedelta(0)):
-                return '%04d-%02d-%02d' % (d.year, d.month, d.day)
+            if (
+                d.hour == 0
+                and d.minute == 0
+                and d.second == 0
+                and d.microsecond == 0
+                and (d.tzinfo is None or d.utcoffset() == datetime.timedelta(0))
+            ):
+                return "%04d-%02d-%02d" % (d.year, d.month, d.day)
 
             elif d.second == 0 and d.microsecond == 0:
-                return '%04d-%02d-%02dT%02d:%02d%s' % \
-                    (d.year, d.month, d.day, d.hour, d.minute, tz)
+                return "%04d-%02d-%02dT%02d:%02d%s" % (
+                    d.year,
+                    d.month,
+                    d.day,
+                    d.hour,
+                    d.minute,
+                    tz,
+                )
 
             elif d.microsecond == 0:
-                return '%04d-%02d-%02dT%02d:%02d:%02d%s' % \
-                    (d.year, d.month, d.day, d.hour, d.minute, d.second, tz)
+                return "%04d-%02d-%02dT%02d:%02d:%02d%s" % (
+                    d.year,
+                    d.month,
+                    d.day,
+                    d.hour,
+                    d.minute,
+                    d.second,
+                    tz,
+                )
 
             else:
-                r = '%04d-%02d-%02dT%02d:%02d:%02d.' % \
-                    (d.year, d.month, d.day, d.hour, d.minute, d.second)
-                r += str(int(d.microsecond) / 1E6)[2:]
+                r = "%04d-%02d-%02dT%02d:%02d:%02d." % (
+                    d.year,
+                    d.month,
+                    d.day,
+                    d.hour,
+                    d.minute,
+                    d.second,
+                )
+                r += str(int(d.microsecond) / 1e6)[2:]
                 r += tz
                 return r
 
         elif isinstance(d, datetime.date):
-            return '%04d-%02d-%02d' % (d.year, d.month, d.day)
+            return "%04d-%02d-%02d" % (d.year, d.month, d.day)
 
         else:
-            raise TypeError('expecting an object of type '
-                            'datetime.datetime or datetime.date')
+            raise TypeError(
+                "expecting an object of type " "datetime.datetime or datetime.date"
+            )

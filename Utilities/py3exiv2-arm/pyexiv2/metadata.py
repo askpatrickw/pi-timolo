@@ -65,8 +65,8 @@ class ImageMetadata(MutableMapping):
         """
         self.filename = filename
         self.__image = None
-        self._keys = {'exif': None, 'iptc': None, 'xmp': None}
-        self._tags = {'exif': {}, 'iptc': {}, 'xmp': {}}
+        self._keys = {"exif": None, "iptc": None, "xmp": None}
+        self._tags = {"exif": {}, "iptc": {}, "xmp": {}}
         self._exif_thumbnail = None
 
     def _instantiate_image(self, filename):
@@ -100,7 +100,7 @@ class ImageMetadata(MutableMapping):
     @property
     def _image(self):
         if self.__image is None:
-            raise IOError('Image metadata has not been read yet')
+            raise IOError("Image metadata has not been read yet")
 
         return self.__image
 
@@ -148,40 +148,32 @@ class ImageMetadata(MutableMapping):
 
     @property
     def mime_type(self):
-        """The mime type of the image, as a string.
-
-        """
+        """The mime type of the image, as a string."""
         return self._image._getMimeType()
 
     @property
     def exif_keys(self):
-        """Return the list of the keys of the available EXIF tags.
+        """Return the list of the keys of the available EXIF tags."""
+        if self._keys["exif"] is None:
+            self._keys["exif"] = self._image._exifKeys()
 
-        """
-        if self._keys['exif'] is None:
-            self._keys['exif'] = self._image._exifKeys()
-
-        return self._keys['exif']
+        return self._keys["exif"]
 
     @property
     def iptc_keys(self):
-        """Return the list of the keys of the available IPTC tags.
+        """Return the list of the keys of the available IPTC tags."""
+        if self._keys["iptc"] is None:
+            self._keys["iptc"] = self._image._iptcKeys()
 
-        """
-        if self._keys['iptc'] is None:
-            self._keys['iptc'] = self._image._iptcKeys()
-
-        return self._keys['iptc']
+        return self._keys["iptc"]
 
     @property
     def xmp_keys(self):
-        """Return the list of the keys of the available XMP tags.
+        """Return the list of the keys of the available XMP tags."""
+        if self._keys["xmp"] is None:
+            self._keys["xmp"] = self._image._xmpKeys()
 
-        """
-        if self._keys['xmp'] is None:
-            self._keys['xmp'] = self._image._xmpKeys()
-
-        return self._keys['xmp']
+        return self._keys["xmp"]
 
     def _get_exif_tag(self, key):
         """Return the EXIF tag for the given key.
@@ -192,11 +184,11 @@ class ImageMetadata(MutableMapping):
         key -- the exif key
         """
         try:
-            return self._tags['exif'][key]
+            return self._tags["exif"][key]
         except KeyError:
             _tag = self._image._getExifTag(key)
             tag = ExifTag._from_existing_tag(_tag)
-            self._tags['exif'][key] = tag
+            self._tags["exif"][key] = tag
             return tag
 
     def _get_iptc_tag(self, key):
@@ -208,11 +200,11 @@ class ImageMetadata(MutableMapping):
         key -- the iptc key
         """
         try:
-            return self._tags['iptc'][key]
+            return self._tags["iptc"][key]
         except KeyError:
             _tag = self._image._getIptcTag(key)
             tag = IptcTag._from_existing_tag(_tag)
-            self._tags['iptc'][key] = tag
+            self._tags["iptc"][key] = tag
             return tag
 
     def _get_xmp_tag(self, key):
@@ -224,11 +216,11 @@ class ImageMetadata(MutableMapping):
         key -- the xmp key
         """
         try:
-            return self._tags['xmp'][key]
+            return self._tags["xmp"][key]
         except KeyError:
             _tag = self._image._getXmpTag(key)
             tag = XmpTag._from_existing_tag(_tag)
-            self._tags['xmp'][key] = tag
+            self._tags["xmp"][key] = tag
             return tag
 
     def __getitem__(self, key):
@@ -241,9 +233,9 @@ class ImageMetadata(MutableMapping):
                ``familyName.groupName.tagName`` where ``familyName`` may
                be one of ``exif``, ``iptc`` or ``xmp``.
         """
-        family = key.split('.')[0].lower()
-        if family in ('exif', 'iptc', 'xmp'):
-            return getattr(self, '_get_%s_tag' % family)(key)
+        family = key.split(".")[0].lower()
+        if family in ("exif", "iptc", "xmp"):
+            return getattr(self, "_get_%s_tag" % family)(key)
 
         else:
             raise KeyError(key)
@@ -263,9 +255,9 @@ class ImageMetadata(MutableMapping):
             tag = ExifTag(key, tag_or_value)
 
         tag._set_owner(self)
-        self._tags['exif'][tag.key] = tag
+        self._tags["exif"][tag.key] = tag
         if tag.key not in self.exif_keys:
-            self._keys['exif'].append(tag.key)
+            self._keys["exif"].append(tag.key)
 
     def _set_iptc_tag(self, key, tag_or_values):
         """Set an IPTC tag. If the tag already exists, its value is overwritten.
@@ -282,9 +274,9 @@ class ImageMetadata(MutableMapping):
             tag = IptcTag(key, tag_or_values)
 
         tag._set_owner(self)
-        self._tags['iptc'][tag.key] = tag
+        self._tags["iptc"][tag.key] = tag
         if tag.key not in self.iptc_keys:
-            self._keys['iptc'].append(tag.key)
+            self._keys["iptc"].append(tag.key)
 
     def _set_xmp_tag(self, key, tag_or_value):
         """Set an XMP tag. If the tag already exists, its value is overwritten.
@@ -301,9 +293,9 @@ class ImageMetadata(MutableMapping):
             tag = XmpTag(key, tag_or_value)
 
         tag._set_owner(self)
-        self._tags['xmp'][tag.key] = tag
+        self._tags["xmp"][tag.key] = tag
         if tag.key not in self.xmp_keys:
-            self._keys['xmp'].append(tag.key)
+            self._keys["xmp"].append(tag.key)
 
     def __setitem__(self, key, tag_or_value):
         """Set a metadata tag for a given key.
@@ -325,9 +317,9 @@ class ImageMetadata(MutableMapping):
                               pyexiv2.xmp.XmpTag instance or
                               any valid value type
         """
-        family = key.split('.')[0].lower()
-        if family in ('exif', 'iptc', 'xmp'):
-            return getattr(self, '_set_%s_tag' % family)(key, tag_or_value)
+        family = key.split(".")[0].lower()
+        if family in ("exif", "iptc", "xmp"):
+            return getattr(self, "_set_%s_tag" % family)(key, tag_or_value)
 
         else:
             raise KeyError(key)
@@ -341,17 +333,17 @@ class ImageMetadata(MutableMapping):
         key -- the EXIF key
         """
         if key not in self.exif_keys:
-            raise KeyError('Cannot delete an inexistent tag')
+            raise KeyError("Cannot delete an inexistent tag")
 
         self._image._deleteExifTag(key)
         try:
-            del self._tags['exif'][key]
+            del self._tags["exif"][key]
         except KeyError:
             # The tag was not cached.
             pass
 
-        if self._keys['exif'] is not None:
-            self._keys['exif'].remove(key)
+        if self._keys["exif"] is not None:
+            self._keys["exif"].remove(key)
 
     def _delete_iptc_tag(self, key):
         """Delete an IPTC tag.
@@ -362,17 +354,17 @@ class ImageMetadata(MutableMapping):
         key -- the IPTC key
         """
         if key not in self.iptc_keys:
-            raise KeyError('Cannot delete an inexistent tag')
+            raise KeyError("Cannot delete an inexistent tag")
 
         self._image._deleteIptcTag(key)
         try:
-            del self._tags['iptc'][key]
+            del self._tags["iptc"][key]
         except KeyError:
             # The tag was not cached.
             pass
 
-        if self._keys['iptc'] is not None:
-            self._keys['iptc'].remove(key)
+        if self._keys["iptc"] is not None:
+            self._keys["iptc"].remove(key)
 
     def _delete_xmp_tag(self, key):
         """Delete an XMP tag.
@@ -383,17 +375,17 @@ class ImageMetadata(MutableMapping):
         key -- the XMP key
         """
         if key not in self.xmp_keys:
-            raise KeyError('Cannot delete an inexistent tag')
+            raise KeyError("Cannot delete an inexistent tag")
 
         self._image._deleteXmpTag(key)
         try:
-            del self._tags['xmp'][key]
+            del self._tags["xmp"][key]
         except KeyError:
             # The tag was not cached.
             pass
 
-        if self._keys['xmp'] is not None:
-            self._keys['xmp'].remove(key)
+        if self._keys["xmp"] is not None:
+            self._keys["xmp"].remove(key)
 
     def __delitem__(self, key):
         """Delete a metadata tag for a given key.
@@ -405,9 +397,9 @@ class ImageMetadata(MutableMapping):
                ``familyName.groupName.tagName`` where ``familyName`` may
                be one of ``exif``, ``iptc`` or ``xmp``.
         """
-        family = key.split('.')[0].lower()
-        if family in ('exif', 'iptc', 'xmp'):
-            return getattr(self, '_delete_%s_tag' % family)(key)
+        family = key.split(".")[0].lower()
+        if family in ("exif", "iptc", "xmp"):
+            return getattr(self, "_delete_%s_tag" % family)(key)
 
         else:
             raise KeyError(key)
@@ -431,8 +423,12 @@ class ImageMetadata(MutableMapping):
     def _del_comment(self):
         self._image._clearComment()
 
-    comment = property(fget=_get_comment, fset=_set_comment, fdel=_del_comment,
-                       doc='The image comment.')
+    comment = property(
+        fget=_get_comment,
+        fset=_set_comment,
+        fdel=_del_comment,
+        doc="The image comment.",
+    )
 
     @property
     def previews(self):
@@ -461,33 +457,29 @@ class ImageMetadata(MutableMapping):
         self._image._copyMetadata(other._image, exif, iptc, xmp)
         # Empty the cache where needed
         if exif:
-            other._keys['exif'] = None
-            other._tags['exif'] = {}
+            other._keys["exif"] = None
+            other._tags["exif"] = {}
 
         if iptc:
-            other._keys['iptc'] = None
-            other._tags['iptc'] = {}
+            other._keys["iptc"] = None
+            other._tags["iptc"] = {}
 
         if xmp:
-            other._keys['xmp'] = None
-            other._tags['xmp'] = {}
+            other._keys["xmp"] = None
+            other._tags["xmp"] = {}
 
         if comment:
             other.comment = self.comment
 
     @property
     def buffer(self):
-        """The image buffer as a string.
-
-        """
-        #XXX Deprecated
+        """The image buffer as a string."""
+        # XXX Deprecated
         return
 
     @property
     def exif_thumbnail(self):
-        """A thumbnail image optionally embedded in the EXIF data.
-
-        """
+        """A thumbnail image optionally embedded in the EXIF data."""
         if self._exif_thumbnail is None:
             self._exif_thumbnail = ExifThumbnail(self)
 
@@ -495,7 +487,7 @@ class ImageMetadata(MutableMapping):
 
     def _get_iptc_charset(self):
         value = self._image._getIptcCharset()
-        if value != '':
+        if value != "":
             return value.lower()
 
         else:
@@ -512,18 +504,21 @@ class ImageMetadata(MutableMapping):
             raise ValueError(error)
 
         else:
-            charsets = {'utf-8': '\x1b%G'}
+            charsets = {"utf-8": "\x1b%G"}
             try:
-                self['Iptc.Envelope.CharacterSet'] = (charsets[name],)
+                self["Iptc.Envelope.CharacterSet"] = (charsets[name],)
             except KeyError:
-                raise ValueError('Unhandled charset: %s' % name)
+                raise ValueError("Unhandled charset: %s" % name)
 
     def _del_iptc_charset(self):
         try:
-            del self['Iptc.Envelope.CharacterSet']
+            del self["Iptc.Envelope.CharacterSet"]
         except KeyError:
             pass
 
-    iptc_charset = property(fget=_get_iptc_charset, fset=_set_iptc_charset,
-                            fdel=_del_iptc_charset,
-                            doc='An optional character set the IPTC data is encoded in.')
+    iptc_charset = property(
+        fget=_get_iptc_charset,
+        fset=_set_iptc_charset,
+        fdel=_del_iptc_charset,
+        doc="An optional character set the IPTC data is encoded in.",
+    )

@@ -31,33 +31,26 @@ Provide the Preview class.
 
 import sys
 
-class Preview(object):
-    """A preview image (properties and data buffer) embedded in image metadata.
 
-    """
+class Preview(object):
+    """A preview image (properties and data buffer) embedded in image metadata."""
 
     def __init__(self, preview):
         self.__preview = preview
 
     @property
     def mime_type(self):
-        """The mime type of the preview image (e.g. ``image/jpeg``).
-
-        """
+        """The mime type of the preview image (e.g. ``image/jpeg``)."""
         return self.__preview.mime_type
 
     @property
     def extension(self):
-        """The file extension of the preview image with a leading dot.
-
-        """
+        """The file extension of the preview image with a leading dot."""
         return self.__preview.extension
 
     @property
     def size(self):
-        """The size of the preview image in bytes.
-
-        """
+        """The size of the preview image in bytes."""
         return self.__preview.size
 
     @property
@@ -70,9 +63,7 @@ class Preview(object):
 
     @property
     def data(self):
-        """The preview image data buffer.
-
-        """
+        """The preview image data buffer."""
         buf = bytes(self.__preview.data)
         return buf
 

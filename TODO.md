@@ -22,4 +22,3 @@ TO DO
   - [ ] convid.sh downloads video.conf
 - [x] Delete shutdown.py -- This is for RPI shutdown via a button. Not relevant to pi-timolo
 - [ ] For Pantilt... move the BCM install to a seperate install
-

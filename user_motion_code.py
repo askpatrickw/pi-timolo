@@ -14,7 +14,7 @@ program when motion is detected.
 For more information see pi-timolo github Wiki
 """
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 def userMotionCode(filenamePath):
     """
     Users can put code here that needs to be run
