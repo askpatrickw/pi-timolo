@@ -24,8 +24,9 @@ The Config and the Plugins are well documented in the original Wiki:
 [Customize Configuration](https://github.com/pageauc/pi-timolo/wiki/Customize-Configuration)
 
 ## What is broken?
-The PanTiltHead functionality requires some libraries I've not spent
-time figuring out yet. I don't have that hardware, I may never work on it.
+The PanTiltHead functionality requires some libraries whcih were binaries
+in the original repo. I've not spent time figuring out yet. I don't have
+that hardware, I may never work on it.
 
 The Rclone functionality is not installed by default like it was in the original
 repo. I will likely work on this at some point as it wil be useful in my setup.
@@ -39,7 +40,7 @@ repo. I will likely work on this at some point as it wil be useful in my setup.
 | user_motion_code.py | A file where you can add your own code to be run when motion is detected |
 | webserver.py | A basic webserver to browse the pics and vids in the media folder. |
 | webserver.sh | A helper script to run webserver.py in the background  |
-| original_config.py | The original config files are stored here so you always have them.<br>They are copied to where they are needed by ./install-pi-timolo.sh|
+| original_config folder | The original config files are stored here so you always have them.<br>They are copied to where they are needed by ./install-pi-timolo.sh|
 | utilities | A folder containing utility scripts |
 | docs | A folder containing oringal README. |
 | pantilthat | A folder containing the pantilthat functionality **BROKEN**|
